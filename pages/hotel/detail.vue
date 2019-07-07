@@ -160,7 +160,7 @@
 </template>
 
 <script>
-import Map from '@/components/hotel/map'
+import Map from '@/components/hotel/hotelMap'
 import Commit from '@/components/hotel/commit'
   
 
@@ -248,9 +248,7 @@ export default {
            
             padding: 20px 0;
             
-             .el-icon-arrow-right{
-                 
-        }
+       
         }
        .userDetail{
            h4{
