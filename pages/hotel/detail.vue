@@ -29,11 +29,6 @@
                 </span>
             </el-col>
         </el-row >
-        <!-- <el-row class="hotelPrice" type="flex" justify="space-between">
-            <el-col >价格来源</el-col>
-            <el-col >低价房型</el-col>
-            <el-col >最低价格</el-col>
-        </el-row > -->
         <!-- 床位价格 -->
         <el-row type="flex" class="eachHotel">
            <el-table
@@ -74,14 +69,16 @@
                     <el-tab-pane label="风景" name="first">
                         <div class="viewLocation">
                             <ul>
-                                <li>123</li>
+                                <li v-for="(item,index) in scenic"
+                                :key="index">{{item.name}} <span>一颗心的公里</span> </li>
                             </ul>
                         </div>
                     </el-tab-pane>
                     <el-tab-pane label="交通" name="second">
-                        <div class="trafficLocation">
-                            <ul>
-                                <li>789</li>
+                        <div class="viewLocation">
+                             <ul>
+                                <li v-for="(item,index) in scenic"
+                                :key="index">{{item.name}} <span>N公里</span></li>
                             </ul>
                         </div>
                     </el-tab-pane>
@@ -191,7 +188,7 @@ export default {
             this.scores=this.dataList.scores
             this.location=this.dataList.location
             this.crownLength=this.dataList.hotellevel.level
-
+            this.scenic=this.dataList.scenic
             // 添加皇冠的数量
             let crown = this.crown[0]
             let newArr=[]
@@ -202,7 +199,10 @@ export default {
         })
     },
     data() {
+        
       return {
+          // 地图数据
+        scenic:[],
         //   皇冠数量
         crownLength:null,
         //   酒店等级皇冠图标
@@ -245,12 +245,7 @@ export default {
          width: 1000px;
             margin: 0 auto;
         .meta{
-           
             padding: 20px 0;
-            
-             .el-icon-arrow-right{
-                 
-        }
         }
        .userDetail{
            h4{
@@ -259,7 +254,6 @@ export default {
                font-size: x-large;
                span{
                    color: #f90;
-                   
                }
            }
            h5{
@@ -321,10 +315,16 @@ export default {
                float: left;
                margin-left: 20px;
                .viewLocation{
-                   width: 300px;
+                   width: 330px;
                    height: 330px;
-                   
                    overflow: auto;
+                   color: #666;
+                   li{
+                       margin: 8px 0;
+                   }
+                   span{
+                       float: right;
+                   }
                }
            }
        }
