@@ -3,7 +3,7 @@
         <div class="meta">
             <el-breadcrumb separator-class="el-icon-arrow-right">
             <el-breadcrumb-item :to="{ path: '/hotel' }">酒店</el-breadcrumb-item>
-            <el-breadcrumb-item :to="{ path: '/hotel' }">南京酒店</el-breadcrumb-item>
+            <el-breadcrumb-item :to="{ path: '/hotel' }">{{cityData.name}}酒店</el-breadcrumb-item>
             <el-breadcrumb-item>{{dataList.name}}</el-breadcrumb-item>
         </el-breadcrumb>
         </div>
@@ -70,7 +70,7 @@
                         <div class="viewLocation">
                             <ul>
                                 <li v-for="(item,index) in scenic"
-                                :key="index">{{item.name}} <span>一颗心的公里</span> </li>
+                                :key="index">{{item.name}} <span>一颗心的距离</span> </li>
                             </ul>
                         </div>
                     </el-tab-pane>
@@ -196,11 +196,26 @@ export default {
                 newArr.push(crown);
             }
             this.crown=newArr
-        })
+        }),
+          this.$axios({
+        url:"/hotels",
+        method:"GET",
+        params:{
+          city:this.$route.query.city
+        }
+      }).then(res=>{
+        const {data}=res.data;
+        // console.log(data[0].scenic);
+        this.cityData=data[0].city;
+        this.scenic=data[0].scenic;
+        console.log(this.cityData);
+      })
     },
     data() {
         
       return {
+        //  市名
+        cityData:{},
           // 地图数据
         scenic:[],
         //   皇冠数量
