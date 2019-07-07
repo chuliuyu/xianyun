@@ -16,6 +16,7 @@
                 <!-- select 点击选中建议项时触发 -->
                 <el-autocomplete
                 :fetch-suggestions="queryDepartSearch"
+                :trigger-on-focus="false"
                 placeholder="请搜索出发城市"
                 @select="handleDepartSelect"
                 class="el-autocomplete"
@@ -24,6 +25,7 @@
             <el-form-item label="到达城市">
                 <el-autocomplete
                 :fetch-suggestions="queryDestSearch"
+                :trigger-on-focus="false"
                 placeholder="请搜索到达城市"
                 @select="handleDestSelect"
                 class="el-autocomplete"
