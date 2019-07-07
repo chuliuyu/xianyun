@@ -1,14 +1,17 @@
 <template>
   <div class="box">
     
-    <div id="container"></div>
+    <div id="container" @click="handleIsShow"></div>
 
-    <div id="panel"></div>
+    <div id="panel" v-show="isShow" >
+      
+    </div>
 
     <div>
         城市：<select name="" id="" v-model="city">
         <option value="广州" >广州</option>
         <option value="深圳" >深圳</option>
+        <option value="南京" >南京</option>
     </select>
     起点：<input type="text" placeholder="请输入出发的位置" v-model="start">
     终点：<input type="text" placeholder="请输入目的地" v-model="end">
@@ -18,6 +21,8 @@
 </template>
 
 <script>
+// 获取已经添加的marker
+
 export default {
     data(){
         return {
@@ -27,8 +32,8 @@ export default {
             map:null,
             id:37,
             // 传递过来的酒店坐标
-            longitude:'',
-            latitude:'',
+           
+           isShow:true
         }
     },
     props:{
@@ -38,6 +43,9 @@ export default {
       }
     },
     methods:{
+      handleIsShow(){
+        this.isShow=!this.isShow
+      },
         handleSearch(){
          this.map = new AMap.Map("container", {
         // 添加配置
@@ -62,15 +70,14 @@ export default {
     },
   mounted() {
     setTimeout(() => {
-        
+    window.onLoad = ()=>{
       console.log(this.location);
-    window.onLoad = function() {
       var map = new AMap.Map("container", {
         // 添加配置
         zoom: 20, //级别
         
-        // center: [this.location.longitude,this.location.latitude], //中心点坐标
-        center: [ 118.92251,31.75561], //中心点坐标
+        center: [this.location.longitude,this.location.latitude], //中心点坐标
+        // center: [ 118.92251,31.75561], //中心点坐标
         viewMode: "3D", //使用3D视图
         
       });
@@ -81,42 +88,67 @@ export default {
             map.addControl(toolbar);
         });
    
-
-    //   var marker1 = new AMap.Marker({
-    //     // 自定义图片内容
+    //  var markers = [{
     //     icon: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-1.png',
-    //     position: new AMap.LngLat(113.3245904,23.1066805), // 经纬度对象
-    //     title: "广州塔"
-    //   });
-    //   var marker2 = new AMap.Marker({
-    //     // 自定义图片内容
+    //     position: [118.92251,31.75561]
+    // }, {
     //     icon: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-2.png',
-    //     position: new AMap.LngLat(113.318977, 23.114155), // 经纬度对象
-    //     title: "体育西(地铁)"
-    //   });
-    //   map.add([marker1, marker2]);
-     var markers = [{
-        icon: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-1.png',
-        position: [113.3245904,23.1066805]
-    }, {
-        icon: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-2.png',
-        position: [113.318977, 23.114155]
-    }, {
-        icon: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-3.png',
-        position: [113.318977, 23.118155]
-    }];
+    //     position: [118.92251, 31.75661]
+    // }, {
+    //     icon: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-3.png',
+    //     position: [118.92251, 31.75671]
+    // }];
 
-    // 添加一些分布不均的点到地图上,地图上添加三个点标记，作为参照
-    markers.forEach(function(marker) {
-        new AMap.Marker({
-            map: map,
-            icon: marker.icon,
-            position: [marker.position[0], marker.position[1]],
-            offset: new AMap.Pixel(-13, -30)
-        });
-    });
+    // // 添加一些分布不均的点到地图上,地图上添加三个点标记，作为参照
+    // markers.forEach(function(marker) {
+    //     new AMap.Marker({
+    //         map: map,
+    //         icon: marker.icon,
+    //         position: [marker.position[0], marker.position[1]],
+    //         offset: new AMap.Pixel(-13, -30)
+    //     });
+    // });
+    var marker = new AMap.Marker({
+    position: new AMap.LngLat(118.92251, 31.75561),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+    title: '北京'
+});
+    var marker1 = new AMap.Marker({
+    position: new AMap.LngLat(118.92251, 31.75661),   // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
+    title: '北京'
+});
+
+// 将创建的点标记添加到已有的地图实例：
+map.add([marker,marker1]);
 // map.add([marker])
-      
+  //     var clickHandler = function(e) {
+  //       map.getAllOverlays('marker');
+  //       alert('您在[ '+e.lnglat.getLng()+','+e.lnglat.getLat()+' ]的位置点击了地图！');
+  // };
+    marker.on('mouseover', (ev) => {
+ 
+  // 触发事件的地理坐标，AMap.LngLat 类型
+  var lnglat = ev.lnglat;
+   console.log(lnglat);
+  map.center=[lnglat.lbg,lnglat.lat];
+  this.location.longitude=lnglat.lbg
+  this.location.latitude=lnglat.lat
+  console.log(this.location);
+ 
+});
+    marker1.on('mouseover', (ev,map) => {
+ 
+  // 触发事件的地理坐标，AMap.LngLat 类型
+  var lnglat = ev.lnglat;
+  console.log(lnglat);
+  
+  this.location.longitude=lnglat.lbg
+  this.location.latitude=lnglat.lat
+  console.log(this.location);
+ 
+});
+
+// 绑定事件
+  // map.on('mouseover', clickHandler);
       
     };
     var url = `https://webapi.amap.com/maps?v=1.4.15&key=4bbcab3db124d1d3927ece5b700e091a&callback=onLoad&plugin=AMap.Driving`;

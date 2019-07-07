@@ -206,7 +206,7 @@ export default {
         //   皇冠数量
         crownLength:null,
         //   酒店等级皇冠图标
-        crown:['<span class="iconfont iconhuangguan"></span>'],
+        crown:['<span class="iconfont iconhuangguan" :title="dataList.hotellevel.name"></span>'],
         //   地图坐标
         location:{},
         // 用户评论酒店等级
