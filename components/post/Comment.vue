@@ -53,18 +53,42 @@
       </el-row>
       <!-- 文章评论 -->
       <div class="cmt-list">
-        <!-- <div class="cmt-item">
-          <div class="cmt-info" v-for='(item,index) in data' :key='index'>
-            <img src="http://157.122.54.189:9095/assets/images/avatar.jpg" />aaa
+        <div class="cmt-item">
+          <div class="cmt-info">
+            <img src="http://157.122.54.189:9095/assets/images/avatar.jpg" />地球发动机
             <i>2019-07-05 4:43</i>
             <span>1</span>
           </div>
           <div class="cmt-content">
               <div class="cmt-new">
-                  <p class="cmt-message" v-for='(item,index) in data' :key='index'>{{item.content}}</p>
+                  <p class="cmt-message">saad</p>
               </div>
           </div>
-        </div> -->
+        </div>
+        <div class="cmt-item">
+          <div class="cmt-info">
+            <img src="http://157.122.54.189:9095/assets/images/avatar.jpg" />地球发动机
+            <i>2019-07-05 4:50</i>
+            <span>1</span>
+          </div>
+          <div class="cmt-content">
+              <div class="cmt-new">
+                  <p class="cmt-message">qwr</p>
+              </div>
+          </div>
+        </div>
+        <div class="cmt-item">
+          <div class="cmt-info">
+            <img src="http://157.122.54.189:9095/assets/images/avatar.jpg" />地球发动机
+            <i>2019-07-05 4:54</i>
+            <span>1</span>
+          </div>
+          <div class="cmt-content">
+              <div class="cmt-new">
+                  <p class="cmt-message">123</p>
+              </div>
+          </div>
+        </div>
       </div>
       <!-- 分页 -->
       <el-row type="flex" justify="center" style="margin-top:10px">
