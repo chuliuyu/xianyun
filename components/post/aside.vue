@@ -7,7 +7,7 @@
           <div class="list">
             <el-row type="flex" class="list_left">
               <img
-                src="http://157.122.54.189:9093/post/detail?id=229"
+                src="@/static/images/world.jpg"
                 style="width:100px; height:'80px'"
               />
               <el-row class="list_right" type="flex">
@@ -17,11 +17,11 @@
             </el-row>
             <el-row type="flex" class="list_left">
               <img
-                src="http://157.122.54.189:9093/post/detail?id=229"
+                src="@/static/images/world.jpg"
                 style="width:100px; height:'80px'"
               />
               <el-row class="list_right" type="flex">
-                <p class="beijing">北京</p>
+                <p class="beijing">123</p>
                 <p class="time">2019-07-07 8:50 阅读 2</p>
               </el-row>
             </el-row>
