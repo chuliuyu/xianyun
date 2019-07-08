@@ -208,7 +208,8 @@ export default {
         // console.log(data[0].scenic);
         this.cityData=data[0].city;
         this.scenic=data[0].scenic;
-        console.log(this.cityData);
+        // console.log(this.cityData);
+        this.location={...this.location,city:this.cityData.name}
       })
     },
     data() {

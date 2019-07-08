@@ -1,22 +1,29 @@
 <template>
   <div class="box">
     <div id="container" @click="handleIsShow"></div>
-
     <div id="panel" v-show="isShow"></div>
-
     <div>
       城市：
       <select name id v-model="city">
         <option value="广州">广州</option>
         <option value="深圳">深圳</option>
         <option value="南京">南京</option>
+        <option value="成都">成都</option>
+        <option value="杭州">杭州</option>
       </select>
       起点：
       <input type="text" placeholder="请输入出发的位置" v-model="start" />
       终点：
       <input type="text" placeholder="请输入目的地" v-model="end" />
       <button @click="handleSearch">驾驶路线</button>
+      <button @click="handleHotel">酒店</button>
     </div>
+     <div id="panel2" class="scrollbar1">
+            <div id="searchBar">
+                <input id="searchInput" placeholder="输入关键字搜素附近美食" v-model="beautifulFood"/>
+            </div>
+            <div id="searchResults"></div>
+      </div>
   </div>
 </template>
 
@@ -31,8 +38,8 @@ export default {
       end: "",
       map: null,
       id: 37,
-      // 传递过来的酒店坐标
-
+      // 输入的美食地点
+      beautifulFood:"",
       isShow: true
     };
   },
@@ -43,6 +50,68 @@ export default {
     }
   },
   methods: {
+    getMapPage(){
+      var map = new AMap.Map("container", {
+           resizeEnable: true,
+          // 添加配置
+          zoom: 20, //级别
+          center: [this.location.longitude, this.location.latitude], //中心点坐标
+          viewMode: "3D" //使用3D视图
+        });
+        this.map = map;
+        // toolbar插件
+        AMap.plugin("AMap.ToolBar", function() {
+          //异步加载插件
+          var toolbar = new AMap.ToolBar();
+          map.addControl(toolbar);
+        });
+       
+       var marker = new AMap.Marker({
+        position: [this.location.longitude, this.location.latitude],
+        icon: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png',
+        offset: new AMap.Pixel(-13, -30),
+      
+        // 设置是否可拖拽
+        draggable: false,
+        cursor: 'move'
+        });
+         map.add(marker)
+        // marker.setMap(map);
+        // 设置点标记的动画效果，此处为弹跳效果
+        marker.setAnimation('AMAP_ANIMATION_BOUNCE');
+        
+        
+        // 搜索附近美食
+         AMapUI.loadUI(['misc/PoiPicker'], (PoiPicker) => {
+        var poiPicker = new PoiPicker({
+            input: 'searchInput',
+            city:this.beautifulFood,
+            placeSearchOptions: {
+                map: map,
+                pageSize: 10
+            },
+            searchResultsContainer: 'searchResults'
+        });
+
+        poiPicker.on('poiPicked', function(poiResult) {
+
+            poiPicker.hideSearchResults();
+
+            var source = poiResult.source,
+                poi = poiResult.item;
+
+            if (source !== 'search') {
+                //suggest来源的，同样调用搜索
+                poiPicker.searchByKeyword(poi.name);
+            } else {
+            }
+        });
+
+        poiPicker.onCityReady(function() {
+            poiPicker.searchByKeyword('美食');
+        });
+    });
+    },
     handleIsShow() {
       this.isShow = !this.isShow;
     },
@@ -65,29 +134,9 @@ export default {
         // 未出错时，result即是对应的路线规划方案
       });
     },
-    // 渲染页面的函数
-    handleRender() {
-      var map = new AMap.Map("container", {
-        // 添加配置
-        zoom: 20, //级别
-        center: [this.location.longitude, this.location.latitude], //中心点坐标
-        viewMode: "3D" //使用3D视图
-      });
-      var marker = new AMap.Marker({
-        position: new AMap.LngLat(118.92251, 31.75561), // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
-        title: "酒店"
-      });
-      var marker1 = new AMap.Marker({
-        position: new AMap.LngLat(118.92251, 31.75661), // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
-        title: "景点"
-      });
-    }
-  },
-  mounted() {
-    setTimeout(() => {
-      window.onLoad = () => {
-        console.log(this.location);
+    handleHotel(){
         var map = new AMap.Map("container", {
+           resizeEnable: true,
           // 添加配置
           zoom: 20, //级别
           center: [this.location.longitude, this.location.latitude], //中心点坐标
@@ -100,80 +149,42 @@ export default {
           var toolbar = new AMap.ToolBar();
           map.addControl(toolbar);
         });
-        //  var markers = [{
-        //     icon: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-1.png',
-        //     position: [118.92251,31.75561]
-        // }, {
-        //     icon: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-2.png',
-        //     position: [118.92251, 31.75661]
-        // }, {
-        //     icon: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-3.png',
-        //     position: [118.92251, 31.75671]
-        // }];
-
-        // // 添加一些分布不均的点到地图上,地图上添加三个点标记，作为参照
-        // markers.forEach(function(marker) {
-        //     new AMap.Marker({
-        //         map: map,
-        //         icon: marker.icon,
-        //         position: [marker.position[0], marker.position[1]],
-        //         offset: new AMap.Pixel(-13, -30)
-        //     });
-        // });
-        var marker = new AMap.Marker({
-          position: new AMap.LngLat(118.92251, 31.75561), // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
-          title: "酒店"
+       
+       var marker = new AMap.Marker({
+        position: [this.location.longitude, this.location.latitude],
+        icon: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png',
+        offset: new AMap.Pixel(-13, -30),
+      
+        // 设置是否可拖拽
+        draggable: false,
+        cursor: 'move'
         });
-        var marker1 = new AMap.Marker({
-          position: new AMap.LngLat(118.92251, 31.75661), // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
-          title: "景点"
-        });
-
-        // 将创建的点标记添加到已有的地图实例：
-        map.add([marker, marker1]);
-        marker.on("mouseover", ev => {
-          // 触发事件的地理坐标，AMap.LngLat 类型
-          var lnglat = ev.lnglat;
-
-          map.center = [lnglat.lbg, lnglat.lat];
-          this.location.longitude = lnglat.lng;
-          this.location.latitude = lnglat.lat;
-         this.handleRender()
-        });
-
-        map.on("complete", () => {
-          // 地图图块加载完成后触发
-          marker1.on("click", ev => {
-            // 触发事件的地理坐标，AMap.LngLat 类型
-            var lnglat = ev.lnglat;
-            this.location.longitude = lnglat.lng;
-            this.location.latitude = lnglat.lat;
-            var map = new AMap.Map("container", {
-              // 添加配置
-              zoom: 20, //级别
-              center: [this.location.longitude, this.location.latitude], //中心点坐标
-              viewMode: "3D" //使用3D视图
-            });
-            var marker = new AMap.Marker({
-              position: new AMap.LngLat(118.92251, 31.75561), // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
-              title: "酒店"
-            });
-            var marker1 = new AMap.Marker({
-              position: new AMap.LngLat(118.92251, 31.75661), // 经纬度对象，也可以是经纬度构成的一维数组[116.39, 39.9]
-              title: "景点"
-            });
-
-            // 将创建的点标记添加到已有的地图实例：
-            map.add([marker, marker1]);
-          });
-        });
+         map.add(marker)
+        // marker.setMap(map);
+        // 设置点标记的动画效果，此处为弹跳效果
+        marker.setAnimation('AMAP_ANIMATION_BOUNCE');
+    }
+   
+  },
+  mounted(){
+    setTimeout(() => {
+      window.onLoad = () => {
+        this.beautifulFood=this.location.city
+        this.getMapPage()
       };
-      var url = `https://webapi.amap.com/maps?v=1.4.15&key=4bbcab3db124d1d3927ece5b700e091a&callback=onLoad&plugin=AMap.Driving`;
+      var url = `https://webapi.amap.com/maps?v=1.4.15&key=4bbcab3db124d1d3927ece5b700e091a&callback=onLoad&plugin=AMap.Driving,AMap.PlaceSearch`;
       var jsapi = document.createElement("script");
       jsapi.charset = "utf-8";
       jsapi.src = url;
       document.head.appendChild(jsapi);
-    }, 2000);
+
+      var url2 = `https://webapi.amap.com/ui/1.0/main.js?v=1.0.11`;
+      var jsapi2 = document.createElement("script");
+      jsapi2.charset = "utf-8";
+      jsapi2.src = url2;
+      document.head.appendChild(jsapi2);
+
+    }, 1000);
   }
 };
 </script>
@@ -195,6 +206,7 @@ export default {
   top: 10px;
   right: 10px;
   width: 280px;
+   z-index: 999;
 }
 #panel .amap-call {
   background-color: #009cf9;
@@ -204,6 +216,58 @@ export default {
 #panel .amap-lib-driving {
   border-bottom-left-radius: 4px;
   border-bottom-right-radius: 4px;
-  overflow: hidden;
+ 
+ overflow: hidden;
 }
+ #panel2 {
+        position: absolute;
+        top: 840px;
+        
+        left: 0;
+        height: 666px;
+        overflow: auto;
+        width: 255px;
+        z-index: 999;
+        border-left: 1px solid #eaeaea;
+        /* background-color: #ddd; */
+    }
+    
+    #searchBar {
+        height: 30px;
+        background: #ccc;
+    }
+    
+    #searchInput {
+        width: 100%;
+        height: 30px;
+        line-height: 30%;
+        -webkit-box-sizing: border-box;
+        box-sizing: border-box;
+        border: none;
+        border-bottom: 1px solid #ccc;
+        padding: 0 5px;
+    }
+    
+    #searchResults {
+        overflow: auto;
+        height: calc(100% - 30px);
+    }
+    
+    .amap_lib_placeSearch,
+    .amap-ui-poi-picker-sugg-container {
+        border: none!important;
+    }
+    
+    .amap_lib_placeSearch .poibox.highlight {
+        background-color: #CAE1FF;
+    }
+    
+    .poi-more {
+        display: none!important;
+    }
+
+     .amap-marker:first-child .amap-icon img {
+            width: 12px;
+            height: 24px;
+        }
 </style>

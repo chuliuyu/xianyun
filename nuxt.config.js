@@ -4,14 +4,14 @@ export default {
   ** Headers of the page
   */
   head: {
-    title: "世界上最好用的旅游网站 - 闲云旅游",
+    title: "到中国的每个角落 - 闲云旅游",
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: process.env.npm_package_description || '' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: 'icon', type: 'image/x-icon', href: '/giraffe.ico' },
       // 导入图片样式
       { rel: 'stylesheet', type: 'text/css', href: '//at.alicdn.com/t/font_1168872_ehvuah8v57g.css' }
     ]
